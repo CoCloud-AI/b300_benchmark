@@ -18,7 +18,7 @@
   git commit -m "results: <model> <precision> <driver> - <profiles_completed>"
   git push
   ```
-  Example message: `results: qwen3.5-397b nvfp4 driver595 - 1k1k+1k4k+4k1k`. Git repo is at `~/benchmark` (GitHub: BlacktraderKhan/b300_benchmark). Don't wait for user prompt — commit+push before killing the container so work is safe.
+  Example message: `results: qwen3.5-397b nvfp4 driver595 - 1k1k+1k4k+4k1k`. Git repo is at `~/benchmark` (GitHub: kenzhangwangshu/b300_benchmark). Don't wait for user prompt — commit+push before killing the container so work is safe.
 
 ## Node
 - Hardware: 8× NVIDIA B300 SXM6 AC, 288 GB HBM3e each, SM 103a (detected as B200-class by some tooling)
