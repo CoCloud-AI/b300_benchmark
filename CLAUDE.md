@@ -18,7 +18,7 @@
   git commit -m "results: <model> <precision> <driver> - <profiles_completed>"
   git push
   ```
-  Example message: `results: qwen3.5-397b nvfp4 driver595 - 1k1k+1k4k+4k1k`. Git repo is at `~/benchmark` (GitHub: kenzhangwangshu/b300_benchmark). Don't wait for user prompt — commit+push before killing the container so work is safe.
+  Example message: `results: qwen3.5-397b nvfp4 driver595 - 1k1k+1k4k+4k1k`. Git repo is at `~/benchmark` (GitHub: CoCloud-AI/b300_benchmark). Don't wait for user prompt — commit+push before killing the container so work is safe.
 
 ## Node
 - Hardware: 8× NVIDIA B300 SXM6 AC, 288 GB HBM3e each, SM 103a (detected as B200-class by some tooling)
@@ -70,6 +70,7 @@
 - `~/benchmark/results/<framework>/<model>/json/` — benchmark result JSONs (e.g. `sglang/minimax-m2.7/json/`, `vllm/kimi-k2.5/json/`)
 - `~/benchmark/results/<framework>/<model>/logs/` — per-run stdout tees
 - `~/benchmark/results/metadata/` — node_info.yaml, per-container startup yamls, GPU stats
+- Charts / tables / cost analysis / blog assets live in the separate repo **CoCloud-AI/b300_viz** (split out 2026-07-08). Its scripts read this repo's `results/` + `results_595/` trees via `B300_DATA_ROOT` or a sibling checkout. This repo holds benchmark scripts, configs, and raw data only.
 
 ## Model Queue (NVFP4)
 Status as of 2026-04-16 00:00 UTC — **node wrap-up snapshot for driver upgrade**. Always cross-check `STATUS.md` for the latest sweep state before relying on this.
