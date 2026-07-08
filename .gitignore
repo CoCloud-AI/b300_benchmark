@@ -1,2 +1,8 @@
-NVIDIA-Linux-x86_64-595.58.03.run
+# NVIDIA driver installers
 *.run
+
+# tool state / caches
+.omc/
+__pycache__/
+*.pyc
+.DS_Store
