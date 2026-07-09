@@ -1,0 +1,38 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Namespace(subparser='bench', bench_type='serve', dispatch_function=<function BenchmarkServingSubcommand.cmd at 0x7fb78524e840>, trust_remote_code=True, seed=0, num_prompts=80, dataset_name='random', no_stream=False, dataset_path=None, no_oversample=False, skip_chat_template=False, enable_multimodal_chat=False, disable_shuffle=False, custom_output_len=256, custom_ensure_client_side_data=False, spec_bench_output_len=256, spec_bench_category=None, sonnet_input_len=550, sonnet_output_len=150, sonnet_prefix_len=200, sharegpt_output_len=None, timed_trace_chunk_hash_size=16, timed_trace_sec_multiplier=1, timed_trace_label_timestamp='timestamp', timed_trace_label_input_length='input_length', timed_trace_label_output_length='output_length', timed_trace_label_hash_ids='hash_ids', blazedit_min_distance=0.0, blazedit_max_distance=1.0, asr_max_audio_len_sec=inf, asr_min_audio_len_sec=0.0, random_input_len=1024, random_output_len=4096, random_range_ratio='0.0', random_prefix_len=0, random_batch_size=1, no_reranker=False, random_mm_base_items_per_request=1, random_mm_num_mm_items_range_ratio=0.0, random_mm_limit_mm_per_prompt={'image': 255, 'video': 1}, random_mm_bucket_config={(256, 256, 1): 0.5, (720, 1280, 1): 0.5, (720, 1280, 16): 0.0}, hf_subset=None, hf_split=None, hf_name=None, hf_output_len=None, bfcl_categories=None, prefix_repetition_prefix_len=256, prefix_repetition_suffix_len=256, prefix_repetition_num_prefixes=10, prefix_repetition_output_len=128, speed_bench_dataset_subset='qualitative', speed_bench_output_len=4096, speed_bench_category=None, label=None, backend='openai-chat', base_url='http://127.0.0.1:8000', host='127.0.0.1', port=8000, endpoint='/v1/chat/completions', header=None, max_concurrency=8, model='nvidia/Kimi-K2.7-Code-NVFP4', input_len=None, output_len=None, tokenizer=None, tokenizer_mode='auto', use_beam_search=False, logprobs=None, request_rate=inf, burstiness=1.0, disable_tqdm=False, num_warmups=0, profile=False, save_result=True, save_detailed=False, append_result=False, metadata=None, result_dir=None, result_filename='/results/vllm/kimi-k2.7-code/json/Kimi-K2.7-Code-NVFP4_nvfp4_vllm_tp8_conc8_1k4k.json', ignore_eos=True, self_timed=None, percentile_metrics=None, metric_percentiles='99', goodput=None, request_id_prefix='bench-7514186c-', top_p=None, top_k=None, min_p=None, temperature=None, frequency_penalty=None, presence_penalty=None, repetition_penalty=None, served_model_name=None, lora_modules=None, lora_assignment='random', ramp_up_strategy=None, ramp_up_start_rps=None, ramp_up_end_rps=None, ready_check_timeout_sec=0, chat_template_kwargs=None, extra_body=None, skip_tokenizer_init=False, insecure=False, plot_timeline=False, timeline_itl_thresholds='25,50', plot_dataset_stats=False)
+WARNING 07-09 13:54:14 [registry.py:234] Using a slow tokenizer. This might cause a significant slowdown. Consider using a fast tokenizer instead.
+INFO 07-09 13:54:14 [utils.py:90] Sampling input_len from [1024, 1024] and output_len from [4096, 4096]
+WARNING: vllm bench serve no longer sets temperature==0 (greedy) in requests by default. The default will be determined on the server side and can be model/API specific. For the old behavior, include --temperature=0.
+Starting initial single prompt test run...
+Skipping endpoint ready check.
+Starting main benchmark run...
+Traffic request rate: inf
+Burstiness factor: 1.0 (Poisson process)
+Maximum request concurrency: 8
+  0%|          | 0/80 [00:00<?, ?it/s]  1%|▏         | 1/80 [00:31<41:10, 31.27s/it] 11%|█▏        | 9/80 [01:02<07:15,  6.13s/it] 21%|██▏       | 17/80 [01:34<05:07,  4.88s/it] 31%|███▏      | 25/80 [02:05<04:05,  4.45s/it] 41%|████▏     | 33/80 [02:36<03:19,  4.25s/it] 48%|████▊     | 38/80 [02:37<02:12,  3.16s/it] 50%|█████     | 40/80 [02:50<02:06,  3.16s/it] 51%|█████▏    | 41/80 [03:08<02:54,  4.49s/it] 57%|█████▊    | 46/80 [03:08<01:46,  3.14s/it] 60%|██████    | 48/80 [03:20<01:40,  3.14s/it] 61%|██████▏   | 49/80 [03:40<02:24,  4.65s/it] 68%|██████▊   | 54/80 [03:40<01:21,  3.13s/it] 70%|███████   | 56/80 [04:00<01:15,  3.13s/it] 71%|███████▏  | 57/80 [04:11<01:49,  4.75s/it] 78%|███████▊  | 62/80 [04:11<00:56,  3.12s/it] 80%|████████  | 64/80 [04:30<00:49,  3.12s/it] 81%|████████▏ | 65/80 [04:43<01:12,  4.80s/it] 88%|████████▊ | 70/80 [04:43<00:31,  3.13s/it] 90%|█████████ | 72/80 [05:00<00:25,  3.13s/it] 91%|█████████▏| 73/80 [05:15<00:33,  4.84s/it]100%|██████████| 80/80 [05:15<00:00,  3.94s/it]
+tip: install termplotlib and gnuplot to plot the metrics
+============ Serving Benchmark Result ============
+Successful requests:                     80        
+Failed requests:                         0         
+Maximum request concurrency:             8         
+Benchmark duration (s):                  315.14    
+Total input tokens:                      82560     
+Total generated tokens:                  327680    
+Request throughput (req/s):              0.25      
+Output token throughput (tok/s):         1039.80   
+Peak output token throughput (tok/s):    1080.00   
+Peak concurrent requests:                16.00     
+Total token throughput (tok/s):          1301.78   
+---------------Time to First Token----------------
+Mean TTFT (ms):                          146.31    
+Median TTFT (ms):                        117.78    
+P99 TTFT (ms):                           234.55    
+-----Time per Output Token (excl. 1st token)------
+Mean TPOT (ms):                          7.66      
+Median TPOT (ms):                        7.66      
+P99 TPOT (ms):                           7.71      
+---------------Inter-token Latency----------------
+Mean ITL (ms):                           7.66      
+Median ITL (ms):                         7.65      
+P99 ITL (ms):                            8.03      
+==================================================
