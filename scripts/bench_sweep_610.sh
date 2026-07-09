@@ -156,6 +156,7 @@ for CONC in 1 2 4 8 16 32 64 128 256 512; do
       --random-output-len $OSL \
       --num-prompts $PROMPTS \
       --max-concurrency $CONC \
+      --trust-remote-code \
       --ignore-eos \
       --ready-check-timeout-sec 0 \
       --endpoint /v1/chat/completions \

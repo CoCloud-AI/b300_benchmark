@@ -1,6 +1,7 @@
 #!/bin/bash
 # serve_kimi-k2.7-code_nvfp4_vllm.sh
-# Status: PENDING VERIFICATION (driver 610 / vLLM v0.24.0 / vLLM-first policy 2026-07-09)
+# Status: ITERATION 2 — added --trust-remote-code (first launch died: checkpoint ships
+#   custom code; transformers resolve_trust_remote_code raised). Originally PENDING VERIFICATION (driver 610 / vLLM v0.24.0 / vLLM-first policy 2026-07-09)
 # Kimi-K2.7-Code (555 GB, kimi_k25 / KimiK25ForConditionalGeneration — VL-wrapper arch; if the vision tower eats KV, add --language-model-only like M3). May need --trust-remote-code if tokenizer requires it.
 # Minimal flags: quant auto-detects from hf_quant_config.json (M3/V4 lesson:
 # forcing --quantization on mixed-precision checkpoints breaks; pure-NVFP4 also
@@ -23,6 +24,7 @@ docker run --gpus all --shm-size 32g --ipc=host --ulimit memlock=-1 \
   --entrypoint vllm \
   "$IMAGE" \
   serve "$MODEL" \
+  --trust-remote-code \
   --tensor-parallel-size 8 \
   --max-model-len 16384 \
   --host 0.0.0.0 --port 8000
