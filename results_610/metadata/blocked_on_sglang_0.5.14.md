@@ -83,3 +83,15 @@ restart required):** stop docker+containerd, move /var/lib/containerd to
 - Caveats to note in writeup: vLLM M3 roadmap #45668 lists NVFP4-indexer work
   pending; open B300 vLLM issue #47239 (Model Runner V2 accuracy/TPOT — workaround
   VLLM_USE_V2_MODEL_RUNNER=0) if we ever cross-check GLM on vLLM.
+
+## Kimi-K2.7-Code vLLM crash at 1k4k conc=512 (2026-07-09)
+
+EngineCore fatal: `TimeoutError: RPC call to sample_tokens timed out` at ~69%
+through the 1k4k conc=512 level (5120 prompts). Progress log shows periodic
+~2min whole-batch stalls at every 512-request boundary, growing to a final
+~4.8min stall before the RPC watchdog killed the engine. Consistent with open
+vLLM issue #47239 (8xB300 Model Runner V2 TPOT fluctuation; workaround
+VLLM_USE_V2_MODEL_RUNNER=0 — NOT applied, to keep runner consistency with the
+other vLLM models which ran clean). 1k4k curve stands at 9 levels (peak 8757
+@ conc=256, +45.6% still climbing). Guard 3 (missing JSON) caught it; retry
+of the single level attempted post-4k1k.
