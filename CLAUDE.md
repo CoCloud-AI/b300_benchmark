@@ -11,6 +11,7 @@
 - Do not touch the `download` session unless explicitly told to — active downloads live there.
 - Queue downloads one at a time (network is shared with the bench node).
 - When making important changes, update CLAUDE.md, SOP.md, STATUS.md, and `configs/*.yaml` immediately. Persistent memory in `~/.claude/projects/-home-howell/memory/` holds cross-session gotchas that are too deep for a rulebook line.
+- **Auto-commit+push after EVERY completed concurrency profile** (upgraded from per-model, user request 2026-07-09 on the driver-610 node — SSH key auth via account key, org policy disables deploy keys). Message: `results_610: <model> <precision> driver610 <framework> - <profile>`. The old per-model rule below stands for context:
 - **Auto-commit after each model's full sweep.** After completing all 3 profiles (1k1k/1k4k/4k1k) for a model, automatically run:
   ```bash
   cd ~/benchmark

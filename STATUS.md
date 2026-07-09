@@ -30,6 +30,12 @@ Last updated: 2026-07-08 (driver-610 node bring-up)
 8. **MiMo-V2.5** `lukealonso/MiMo-V2.5-NVFP4` (184 GB, mimo_v2, 48L/256e/8act) — ⏸ queued. Xiaomi MiMo; reputable community quant (no official XiaomiMiMo NVFP4 org repo). Skipped MiMo-V2.5-Pro (597 GB) — obscure author, gated config, non-standard MXFP8-attn mix, not clean NVFP4.
 
 
+### Framework policy (user decision 2026-07-09): vLLM-first
+For all REMAINING models, try **vLLM v0.24.0 stable first** (all queue archs are
+in its registry); fall back to SGLang 0.5.14 only if vLLM bring-up fails (quant
+path gaps are possible — registry != NVFP4 support, see M3). MiniMax-M3 stays on
+the pinned nightly. Also: commit+push after EVERY profile (not just per model).
+
 ### Revised sequence (user decision 2026-07-09)
 V4-Pro (SGLang, running) → **maintenance window** (containerd→NVMe migration —
 Docker-29 snapshotter puts image layers on 70GB root; script
