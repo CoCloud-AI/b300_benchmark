@@ -99,3 +99,12 @@ UPDATE: single-level retry on a freshly relaunched engine SUCCEEDED cleanly
 (13537 tok/s, ttft_p99 8.9s, tpot 37.5ms, 0 failures) — the RPC timeout was
 TRANSIENT, likely accumulated engine state after 3 chained profiles, not a
 reproducible saturation limit. 1k4k curve complete at 10 levels.
+
+## Qwen3.5-397B-V2: GARBLED on vLLM (both images) — SGLang fallback (2026-07-09)
+
+nvidia/Qwen3.5-397B-A17B-NVFP4-V2 outputs "!!!!..." on 8x B300 under vLLM
+v0.24.0 stable AND nightly-2afa3f7e9. VLLM_USE_V2_MODEL_RUNNER=0 confirmed set
+in-container, no effect. Symptom matches open issues #47239 / #47367. GLM-5.2,
+MiniMax-M3, Kimi-K2.7 are all CLEAN on the same images — bug is specific to the
+qwen3_5_moe NVFP4 path. Fallback: SGLang 0.5.14 (V1 397B precedent on 595 node).
+Partial garbage results purged before any JSON landed in the tree.
