@@ -95,3 +95,7 @@ VLLM_USE_V2_MODEL_RUNNER=0 — NOT applied, to keep runner consistency with the
 other vLLM models which ran clean). 1k4k curve stands at 9 levels (peak 8757
 @ conc=256, +45.6% still climbing). Guard 3 (missing JSON) caught it; retry
 of the single level attempted post-4k1k.
+UPDATE: single-level retry on a freshly relaunched engine SUCCEEDED cleanly
+(13537 tok/s, ttft_p99 8.9s, tpot 37.5ms, 0 failures) — the RPC timeout was
+TRANSIENT, likely accumulated engine state after 3 chained profiles, not a
+reproducible saturation limit. 1k4k curve complete at 10 levels.
