@@ -108,3 +108,9 @@ in-container, no effect. Symptom matches open issues #47239 / #47367. GLM-5.2,
 MiniMax-M3, Kimi-K2.7 are all CLEAN on the same images — bug is specific to the
 qwen3_5_moe NVFP4 path. Fallback: SGLang 0.5.14 (V1 397B precedent on 595 node).
 Partial garbage results purged before any JSON landed in the tree.
+
+## Qwen 397B single-stream regression vs 595 node (2026-07-09)
+1k1k conc=1: 97 tok/s / 10.14ms TPOT on (driver610, sglang 0.5.14, V2 quant) vs
+194 tok/s / 5.0ms TPOT on (driver595, sglang 0.5.10, V1 quant). Peak throughput
+near-parity (10329@512 climbing vs 10652@256 kneed). Factor not isolated
+(sglang version / driver / V2 requant). Flag in writeup; candidate A/B later.
