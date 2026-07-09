@@ -45,7 +45,8 @@ transformers 5.8.1 layer_types pin, tfdsa-patch retry kept as optional A/B)
 → **MiniMax-M3 on vLLM nightly** (`serve_minimax-m3_nvfp4_vllm.sh`; only
 framework+version serving this NVFP4 checkpoint — vLLM PR #46380 missed the
 0.24.0 cut; --block-size 128 + --language-model-only, digest pinned)
-→ back to SGLang 0.5.14: Kimi-K2.7-Code → Qwen3.5-397B-V2 → Step-3.7-Flash → MiMo-V2.5.
+→ (vLLM-first policy) Kimi-K2.7-Code → Qwen3.5-397B-V2 → Step-3.7-Flash → MiMo-V2.5, all on vLLM v0.24.0
+→ CODA (user 2026-07-09): re-run DeepSeek-V4-Flash then V4-Pro on vLLM for the 8/8 vLLM matrix + SGLang↔vLLM A/B.
 vLLM results land under results_610/vllm/<model>/ (framework split per SOP).
 
 ### Key lesson (driver-610 / SGLang 0.5.14)
