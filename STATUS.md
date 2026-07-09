@@ -36,6 +36,37 @@ in its registry); fall back to SGLang 0.5.14 only if vLLM bring-up fails (quant
 path gaps are possible — registry != NVFP4 support, see M3). MiniMax-M3 stays on
 the pinned nightly. Also: commit+push after EVERY profile (not just per model).
 
+
+## 🏁 RUN WRAP-UP — 2026-07-09 16:15 PDT (time-boxed stop, user call)
+
+**Final scoreboard (peak output tok/s, TP=8 NVFP4, driver 610.43.02):**
+
+| Model | Framework | 1k1k | 1k4k | 4k1k |
+|---|---|--:|--:|--:|
+| DeepSeek-V4-Flash (coda) | vLLM 0.24.0 | **17,442** ↑@512 | (conc=1 only: 172) | — stopped |
+| DeepSeek-V4-Flash | SGLang 0.5.14 | 14,304 | 17,049 | 9,073 |
+| Kimi-K2.7-Code | vLLM 0.24.0 | 14,229 ↑ | 13,537 ↑ | 7,090 ↑ |
+| MiniMax-M3 | vLLM nightly-2afa3f7e9 | 14,123 ↑ | 15,139 ↑ | 5,956 @128 |
+| GLM-5.2 | vLLM 0.24.0 | 10,700 ↑ | 12,583 ↑ | 4,169 @128 |
+| Qwen3.5-397B-V2 | SGLang 0.5.14 (vLLM garbles) | 10,329 ↑ | 10,858 ↑ | 6,067 @512 |
+| DeepSeek-V4-Pro | SGLang 0.5.14 | 6,107 @256 | 7,035 @256 | 2,986 @128 |
+| Step-3.7-Flash | — | SKIPPED: unservable at TP=8 (kernel alignment, all frameworks) | | |
+| MiMo-V2.5 | — | SKIPPED: kv-head/TP interleave + mm-processor gaps (both stacks) | | |
+
+↑ = still climbing at the sweep ceiling (conc=512). Zero failed requests across
+every completed sweep (>200k requests total). V4-Pro-on-vLLM coda NOT run
+(time box). Flash coda 1k4k/4k1k stopped after conc=1.
+
+**Headline findings** (full details in results_610/metadata/blocked_on_sglang_0.5.14.md):
+1. Flash SGLang-vs-vLLM A/B (1k1k): SGLang wins mid-range (conc 32–128, up to
+   +29%); vLLM wins saturation (+22% at 512, 17,442 peak — node record).
+2. Kimi-K2.7 vs old-node K2.5: 2,595 → 14,229 (+5.5x, model+framework+driver).
+3. MiniMax-M3 best interactive: 139ms TTFT (145ms p99!), 222 tok/s @ conc=1.
+4. Qwen3.5-V2 garbles on ALL vLLM builds on 8xB300 (#47239/#47367-class);
+   clean on SGLang. Also 2x single-stream TPOT regression vs 595 node.
+5. Two newest checkpoints (Step-3.7, MiMo-V2.5) cannot shard 8-way on today's
+   NVFP4 kernel stacks — misalignment (1280 intermediate) / TP-4-interleaved qkv.
+
 ### Revised sequence (user decision 2026-07-09)
 V4-Pro (SGLang, running) → **maintenance window** (containerd→NVMe migration —
 Docker-29 snapshotter puts image layers on 70GB root; script
