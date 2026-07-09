@@ -114,3 +114,15 @@ Partial garbage results purged before any JSON landed in the tree.
 194 tok/s / 5.0ms TPOT on (driver595, sglang 0.5.10, V1 quant). Peak throughput
 near-parity (10329@512 climbing vs 10652@256 kneed). Factor not isolated
 (sglang version / driver / V2 requant). Flag in writeup; candidate A/B later.
+
+## Step-3.7-Flash: UNSERVABLE at TP=8 NVFP4 on all frameworks (2026-07-09)
+
+stepfun-ai/Step-3.7-Flash-NVFP4: moe_intermediate_size=1280 -> per-rank 160 at
+TP=8 (320 at TP=4 — also broken). Every kernel path rejects it:
+- vLLM v0.24 + nightly, trtllm backend: flashinfer assert M % 128 == 0
+- vLLM flashinfer_cutlass: kernel lacks MoEActivation.SWIGLUSTEP
+- vLLM cutlass: "Intermediate size padding ... not currently supported"
+- SGLang 0.5.14: "intermediate size required padding ... gated activations" assert
+Only TP=2 aligns (640) — breaks full-node TP=8 methodology; a 4x TP=2 replica
+deployment is future work, not comparable. Same alignment family as the 590-node
+M2.7-FP8 TP ceiling, now on the NVFP4 path. SKIPPED; 129 GB weights retained.

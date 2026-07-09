@@ -23,6 +23,7 @@ docker run --gpus all --shm-size 32g --ipc=host --ulimit memlock=-1 \
   --entrypoint vllm \
   "$IMAGE" \
   serve "$MODEL" \
+  --trust-remote-code \
   --tensor-parallel-size 8 \
   --max-model-len 16384 \
   --host 0.0.0.0 --port 8000
