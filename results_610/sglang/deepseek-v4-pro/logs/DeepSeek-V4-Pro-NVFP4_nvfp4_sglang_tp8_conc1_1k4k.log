@@ -1,0 +1,59 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[transformers] Unrecognized keys in `rope_parameters` for 'rope_type'='default': {'attention_factor'}
+[transformers] Unrecognized keys in `rope_parameters` for 'rope_type'='default': {'attention_factor'}
+benchmark_args=Namespace(backend='sglang-oai-chat', base_url='http://127.0.0.1:30000', host='0.0.0.0', port=None, ready_check_timeout_sec=0, dataset_name='random', dataset_path='', speed_bench_category=None, speed_bench_output_len=512, model='nvidia/DeepSeek-V4-Pro-NVFP4', served_model_name=None, tokenizer=None, num_prompts=40, sharegpt_output_len=None, sharegpt_context_len=None, random_input_len=1024, random_output_len=4096, random_range_ratio=1.0, image_count=1, image_resolution='1080p', random_image_count=False, image_format='jpeg', image_content='random', request_rate=inf, use_trace_timestamps=False, max_concurrency=1, output_file='/results/sglang/deepseek-v4-pro/json/DeepSeek-V4-Pro-NVFP4_nvfp4_sglang_tp8_conc1_1k4k.json', output_details=False, print_requests=False, disable_tqdm=False, disable_stream=False, return_logprob=False, top_logprobs_num=0, token_ids_logprob=None, logprob_start_len=-1, return_routed_experts=False, cache_report=False, seed=42, disable_ignore_eos=False, temperature=0.0, top_p=1.0, extra_request_body=None, apply_chat_template=False, profile=False, plot_throughput=False, profile_activities=['CPU', 'GPU'], profile_start_step=None, profile_steps=None, profile_num_steps=None, profile_by_stage=False, profile_stages=None, profile_output_dir=None, profile_prefix=None, lora_name=None, lora_request_distribution='uniform', lora_zipf_alpha=1.5, prompt_suffix='', pd_separated=False, profile_prefill_url=None, profile_decode_url=None, flush_cache=False, warmup_requests=1, tokenize_prompt=False, gsp_num_groups=64, gsp_prompts_per_group=16, gsp_system_prompt_len=2048, gsp_question_len=128, gsp_output_len=256, gsp_range_ratio=1.0, gsp_fast_prepare=False, gsp_send_routing_key=False, gsp_num_turns=1, gsp_ordered=False, gsp_group_distribution='uniform', gsp_zipf_alpha=None, mooncake_slowdown_factor=1.0, mooncake_num_rounds=1, mooncake_workload='conversation', fake_prefill=False, tag=None, header=None)
+
+WARNING It is recommended to use the `Chat` or `Instruct` model for benchmarking.
+Because when the tokenizer counts the output tokens, if there is gibberish, it might count incorrectly.
+
+Namespace(backend='sglang-oai-chat', base_url='http://127.0.0.1:30000', host='0.0.0.0', port=30000, ready_check_timeout_sec=0, dataset_name='random', dataset_path='', speed_bench_category=None, speed_bench_output_len=512, model='nvidia/DeepSeek-V4-Pro-NVFP4', served_model_name=None, tokenizer=None, num_prompts=40, sharegpt_output_len=None, sharegpt_context_len=None, random_input_len=1024, random_output_len=4096, random_range_ratio=1.0, image_count=1, image_resolution='1080p', random_image_count=False, image_format='jpeg', image_content='random', request_rate=inf, use_trace_timestamps=False, max_concurrency=1, output_file='/results/sglang/deepseek-v4-pro/json/DeepSeek-V4-Pro-NVFP4_nvfp4_sglang_tp8_conc1_1k4k.json', output_details=False, print_requests=False, disable_tqdm=False, disable_stream=False, return_logprob=False, top_logprobs_num=0, token_ids_logprob=None, logprob_start_len=-1, return_routed_experts=False, cache_report=False, seed=42, disable_ignore_eos=False, temperature=0.0, top_p=1.0, extra_request_body=None, apply_chat_template=False, profile=False, plot_throughput=False, profile_activities=['CPU', 'GPU'], profile_start_step=None, profile_steps=None, profile_num_steps=None, profile_by_stage=False, profile_stages=None, profile_output_dir=None, profile_prefix=None, lora_name=None, lora_request_distribution='uniform', lora_zipf_alpha=1.5, prompt_suffix='', pd_separated=False, profile_prefill_url=None, profile_decode_url=None, flush_cache=False, warmup_requests=1, tokenize_prompt=False, gsp_num_groups=64, gsp_prompts_per_group=16, gsp_system_prompt_len=2048, gsp_question_len=128, gsp_output_len=256, gsp_range_ratio=1.0, gsp_fast_prepare=False, gsp_send_routing_key=False, gsp_num_turns=1, gsp_ordered=False, gsp_group_distribution='uniform', gsp_zipf_alpha=None, mooncake_slowdown_factor=1.0, mooncake_num_rounds=1, mooncake_workload='conversation', fake_prefill=False, tag=None, header=None)
+
+#Input tokens: 40960
+#Output tokens: 163840
+Starting warmup with 1 sequences...
+Warmup completed with 1 sequences. Starting main benchmark run...
+  0%|          | 0/40 [00:00<?, ?it/s]  2%|▎         | 1/40 [00:37<24:03, 37.01s/it]  5%|▌         | 2/40 [01:14<23:26, 37.02s/it]  8%|▊         | 3/40 [01:51<22:49, 37.01s/it] 10%|█         | 4/40 [02:28<22:12, 37.01s/it] 12%|█▎        | 5/40 [03:05<21:35, 37.01s/it] 15%|█▌        | 6/40 [03:42<20:58, 37.01s/it] 18%|█▊        | 7/40 [04:19<20:21, 37.01s/it] 20%|██        | 8/40 [04:56<19:44, 37.01s/it] 22%|██▎       | 9/40 [05:33<19:07, 37.01s/it] 25%|██▌       | 10/40 [06:10<18:30, 37.01s/it] 28%|██▊       | 11/40 [06:47<17:53, 37.01s/it] 30%|███       | 12/40 [07:24<17:16, 37.01s/it] 32%|███▎      | 13/40 [08:01<16:39, 37.02s/it] 35%|███▌      | 14/40 [08:38<16:02, 37.02s/it] 38%|███▊      | 15/40 [09:15<15:25, 37.02s/it] 40%|████      | 16/40 [09:52<14:48, 37.02s/it] 42%|████▎     | 17/40 [10:29<14:11, 37.02s/it] 45%|████▌     | 18/40 [11:06<13:34, 37.02s/it] 48%|████▊     | 19/40 [11:43<12:57, 37.02s/it] 50%|█████     | 20/40 [12:20<12:20, 37.02s/it] 52%|█████▎    | 21/40 [12:57<11:43, 37.02s/it] 55%|█████▌    | 22/40 [13:34<11:06, 37.02s/it] 57%|█████▊    | 23/40 [14:11<10:29, 37.02s/it] 60%|██████    | 24/40 [14:48<09:52, 37.02s/it] 62%|██████▎   | 25/40 [15:25<09:15, 37.02s/it] 65%|██████▌   | 26/40 [16:02<08:38, 37.02s/it] 68%|██████▊   | 27/40 [16:39<08:01, 37.02s/it] 70%|███████   | 28/40 [17:16<07:24, 37.02s/it] 72%|███████▎  | 29/40 [17:53<06:47, 37.02s/it] 75%|███████▌  | 30/40 [18:30<06:10, 37.02s/it] 78%|███████▊  | 31/40 [19:07<05:33, 37.02s/it] 80%|████████  | 32/40 [19:44<04:56, 37.02s/it] 82%|████████▎ | 33/40 [20:21<04:19, 37.03s/it] 85%|████████▌ | 34/40 [20:58<03:42, 37.03s/it] 88%|████████▊ | 35/40 [21:35<03:05, 37.02s/it] 90%|█████████ | 36/40 [22:12<02:28, 37.02s/it] 92%|█████████▎| 37/40 [22:49<01:51, 37.02s/it] 95%|█████████▌| 38/40 [23:26<01:14, 37.02s/it] 98%|█████████▊| 39/40 [24:03<00:37, 37.02s/it]100%|██████████| 40/40 [24:40<00:00, 37.02s/it]100%|██████████| 40/40 [24:40<00:00, 37.02s/it]
+
+============ Serving Benchmark Result ============
+Backend:                                 sglang-oai-chat
+Traffic request rate:                    inf       
+Max request concurrency:                 1         
+Successful requests:                     40        
+Benchmark duration (s):                  1480.77   
+Total input tokens:                      40960     
+Total input text tokens:                 40960     
+Total generated tokens:                  163840    
+Total generated tokens (retokenized):    163093    
+Request throughput (req/s):              0.03      
+Input token throughput (tok/s):          27.66     
+Output token throughput (tok/s):         110.65    
+Peak output token throughput (tok/s):    113.00    
+Peak concurrent requests:                2         
+Total token throughput (tok/s):          138.31    
+Concurrency:                             1.00      
+----------------End-to-End Latency----------------
+Mean E2E Latency (ms):                   37018.58  
+Median E2E Latency (ms):                 37018.40  
+P90 E2E Latency (ms):                    37029.10  
+P95 E2E Latency (ms):                    37033.50  
+P99 E2E Latency (ms):                    37040.72  
+---------------Time to First Token----------------
+Mean TTFT (ms):                          192.17    
+Median TTFT (ms):                        191.83    
+P90 TTFT (ms):                           197.20    
+P95 TTFT (ms):                           197.58    
+P99 TTFT (ms):                           203.54    
+-----Time per Output Token (excl. 1st token)------
+Mean TPOT (ms):                          8.99      
+Median TPOT (ms):                        8.99      
+P90 TPOT (ms):                           9.00      
+P95 TPOT (ms):                           9.00      
+P99 TPOT (ms):                           9.00      
+---------------Inter-Token Latency----------------
+Mean ITL (ms):                           9.03      
+Median ITL (ms):                         9.00      
+P90 ITL (ms):                            9.30      
+P95 ITL (ms):                            9.36      
+P99 ITL (ms):                            9.50      
+Max ITL (ms):                            27.61     
+==================================================

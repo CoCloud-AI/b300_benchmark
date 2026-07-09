@@ -29,6 +29,19 @@ Last updated: 2026-07-08 (driver-610 node bring-up)
 7. **Step-3.7-Flash** `stepfun-ai/Step-3.7-Flash-NVFP4` (129 GB, step3p7) — ⏸ queued. StepFun's only official NVFP4.
 8. **MiMo-V2.5** `lukealonso/MiMo-V2.5-NVFP4` (184 GB, mimo_v2, 48L/256e/8act) — ⏸ queued. Xiaomi MiMo; reputable community quant (no official XiaomiMiMo NVFP4 org repo). Skipped MiMo-V2.5-Pro (597 GB) — obscure author, gated config, non-standard MXFP8-attn mix, not clean NVFP4.
 
+
+### Revised sequence (user decision 2026-07-09)
+V4-Pro (SGLang, running) → **maintenance window** (containerd→NVMe migration —
+Docker-29 snapshotter puts image layers on 70GB root; script
+`scripts/maintenance_containerd_to_nvme_610.sh` — then pull vLLM stable+nightly)
+→ **GLM-5.2 on vLLM v0.24.0** (`serve_glm-5.2_nvfp4_vllm.sh`; SGLang blocked by
+transformers 5.8.1 layer_types pin, tfdsa-patch retry kept as optional A/B)
+→ **MiniMax-M3 on vLLM nightly** (`serve_minimax-m3_nvfp4_vllm.sh`; only
+framework+version serving this NVFP4 checkpoint — vLLM PR #46380 missed the
+0.24.0 cut; --block-size 128 + --language-model-only, digest pinned)
+→ back to SGLang 0.5.14: Kimi-K2.7-Code → Qwen3.5-397B-V2 → Step-3.7-Flash → MiMo-V2.5.
+vLLM results land under results_610/vllm/<model>/ (framework split per SOP).
+
 ### Key lesson (driver-610 / SGLang 0.5.14)
 **Pass MINIMAL serve flags.** SGLang 0.5.14 natively supports the new archs (deepseek_v4, etc.) and auto-selects the right quant/attention/MoE backends. Every forced R1-era flag broke DeepSeek-V4-Flash: `--quantization modelopt_fp4` (mixed-precision mismatch), `--moe-runner-backend flashinfer_trtllm` (topkGroup<=4 crash), `--attention-backend trtllm_mla` (unneeded; auto → `dsv4`). Working set: `--tp 8 --trust-remote-code --kv-cache-dtype fp8_e4m3 --context-length 16384`.
 
