@@ -1,0 +1,12 @@
+# Dockerfile.sglang-b300 — driver-610 B300 benchmark image
+#
+# The stock lmsysorg/sglang:v0.5.14-cu130-runtime ships a broken dep: the
+# bundled `openai` package imports `distro`, which is NOT installed in the
+# image, so `python3 -m sglang.launch_server` dies at import with
+# `ModuleNotFoundError: No module named 'distro'` before any model loads.
+# This derived image adds the one missing package. Verified: with `distro`
+# present, `import sglang` (0.5.14) and server_args import cleanly.
+#
+# Build:  docker build -t sglang-b300:v0.5.14 -f Dockerfile.sglang-b300 .
+FROM lmsysorg/sglang:v0.5.14-cu130-runtime
+RUN pip install --no-cache-dir distro

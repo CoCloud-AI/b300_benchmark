@@ -1,0 +1,114 @@
+node:
+  hostname: 28-197-33-3.maas
+  user: ken
+  facility: (new node — driver 610 cycle)
+  gpus: 8x NVIDIA B300 SXM6 AC
+  gpus_detail:
+    count: 8
+    model: NVIDIA B300 SXM6 AC
+    pci_device_id: "10de:3182"
+    vram_per_gpu_mib: 275040
+    vram_total_mib: 2200320
+    power_cap_w: 1100
+  driver: 610.43.02
+  driver_type: open kernel module (DKMS)
+  driver_install: ".run installer (CUDA rhel9 repomd.xml was broken server-side; used self-contained .run)"
+  cuda_umd_version: "13.3"
+  previous_drivers: [590.48.01, 595.58.03]
+  os: TencentOS Server 4 (RHEL9-compatible)
+  kernel: 6.6.119-49.22.tl4.x86_64
+  kernel_devel_note: |
+    Default `dnf install kernel-devel` pulls 6.6.119-50.12 which MISMATCHES the
+    running 49.22 kernel and breaks the DKMS build. Must pin
+    kernel-devel-6.6.119-49.22.tl4 (available in BaseOS).
+  secure_boot: disabled (no MOK signing needed for the module)
+  python: "3.11 (host) — bench runs inside container python"
+  cpu:
+    model: Intel(R) Xeon(R) 6776P
+    total_threads: 256
+  ram:
+    total: 2.0 TiB
+  nvme_scratch:
+    devices: 4x 7TB NVMe (nvme0n1..nvme3n1)
+    array: mdadm RAID0 (/dev/md0), 512K chunk, xfs
+    mount: /mnt/nvme (28 TB)
+    usage: HF model cache (/mnt/nvme/hf-cache) + docker data-root (/mnt/nvme/docker)
+    note: |
+      70GB / root cannot hold NGC/SGLang images or multi-TB weights; both are
+      relocated onto the NVMe pool. Array is reboot-safe via /etc/mdadm.conf +
+      fstab (nofail) + rebuilt initramfs.
+  nvswitch_fabric:
+    required: true
+    service: nvidia-fabricmanager (version 610.43.02, MUST match driver)
+    also_requires: nvlsm (NVLink Subnet Manager) — this is an NVL5+ system
+    symptom_if_missing: |
+      nvidia-smi shows 8 GPUs fine, but CUDA context inside a container fails with
+      "CUDA error 802: system not yet initialized" and `nvidia-smi -q` Fabric
+      State = In Progress. fabricmanager without nvlsm aborts: "/opt/nvidia/nvlsm/
+      sbin/nvlsm does not exist". After install+start, Fabric State = Completed
+      and torch.cuda.is_available() = True in-container.
+  extras:
+    ofed: Mellanox OFED 26.04 + DOCA 3.4 present (IB/RoCE); DOCA repo supplies nvlsm deps
+  probed_at: 2026-07-08
+
+containers:
+  sglang:
+    base_image: lmsysorg/sglang:v0.5.14-cu130-runtime
+    serve_image: sglang-b300:v0.5.14   # derived — see scripts/Dockerfile.sglang-b300
+    sglang_version: "0.5.14"
+    pulled: 2026-07-08
+    image_fix: |
+      Stock v0.5.14-cu130-runtime is missing the `distro` python package, which
+      the bundled `openai` lib imports — launch_server dies at import with
+      ModuleNotFoundError before any model loads. Derived image sglang-b300:v0.5.14
+      just adds `pip install distro`. All serve_*_610 scripts use the derived tag.
+    notes: |
+      Newest SGLang tag as of 2026-06-26. CUDA 13.0 runtime; driver 610 UMD 13.3
+      is forward-compatible. The 2026-Q2/Q3 model architectures below are new
+      (deepseek_v4, minimax_m3_vl, glm_moe_dsa, kimi_k25) — support in 0.5.14 is
+      to be verified empirically per model; a nightly may be needed for
+      DeepSeek-V4 (community reports referenced SGLang PR #25820).
+
+goal: |
+  Benchmark the newest open-weight NVFP4 models on driver 610.43.02 / SGLang
+  0.5.14, TP=8, NVFP4 only. Profiles 1k1k first, then 1k4k / 4k1k. Results land
+  in results_610/. Do NOT merge into results_590/ or results_595/ — different
+  driver + framework + models.
+
+model_queue:
+  # NVFP4 checkpoints, verified on HF 2026-07-08. Downloaded smallest-first.
+  - repo: nvidia/DeepSeek-V4-Flash-NVFP4
+    short: deepseek-v4-flash
+    size_gb: 168
+    arch: deepseek_v4 / DeepseekV4ForCausalLM (43L, 256e/6act, MLA, 1M ctx)
+    quant: MIXED_PRECISION (experts NVFP4, attn/shared FP8)
+  - repo: nvidia/MiniMax-M3-NVFP4
+    short: minimax-m3
+    size_gb: 250
+    arch: minimax_m3_vl / MiniMaxM3SparseForConditionalGeneration (multimodal VL)
+    quant: MIXED_PRECISION (modelopt); trust-remote-code
+  - repo: nvidia/GLM-5.2-NVFP4
+    short: glm-5.2
+    size_gb: 465
+    arch: glm_moe_dsa / GlmMoeDsaForCausalLM (78L, 256e/8act, DSA, 1M ctx)
+    quant: NVFP4
+  - repo: nvidia/Kimi-K2.7-Code-NVFP4
+    short: kimi-k2.7-code
+    size_gb: 595
+    arch: kimi_k25 / KimiK25ForConditionalGeneration
+    quant: NVFP4; trust-remote-code
+    note: plain nvidia/Kimi-K2.7-NVFP4 is not published (401) — Code variant used
+  - repo: nvidia/DeepSeek-V4-Pro-NVFP4
+    short: deepseek-v4-pro
+    size_gb: 913
+    arch: deepseek_v4 / DeepseekV4ForCausalLM (61L, 384e/6act, MLA, 1M ctx)
+    quant: MIXED_PRECISION (experts NVFP4, attn/shared FP8)
+
+config_constants:
+  tp: 8
+  ep: 1
+  precision: nvfp4
+  max_model_len: 16384
+  profiles: [1k1k, 1k4k, 4k1k]
+  concurrency: [1, 2, 4, 8, 16, 32, 64, 128, 256, 512]
+  no_parsers: true

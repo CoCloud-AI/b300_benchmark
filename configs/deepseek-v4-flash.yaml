@@ -1,0 +1,52 @@
+# DeepSeek-V4-Flash NVFP4 — driver 610 / SGLang 0.5.14 benchmark config
+model:
+  repo: nvidia/DeepSeek-V4-Flash-NVFP4
+  short: deepseek-v4-flash
+  size_gb: 168
+  model_type: deepseek_v4
+  architecture: DeepseekV4ForCausalLM
+  lineage: DeepSeek-V3/V4 MLA class (sibling of DeepSeek-R1)
+  params: 284B total / 13B active (research); 256 routed experts, 6 active
+  layers: 43
+  hidden_size: 4096
+  attention: MLA (num_key_value_heads=1, q_lora_rank=1024)
+  moe_intermediate_size: 2048
+  max_position_embeddings: 1048576   # 1M ctx; bench caps context-length at 16384
+  quantization:
+    scheme: MIXED_PRECISION
+    experts: NVFP4 (group_size 16)
+    attention_and_shared: FP8 (e4m3)
+    detected_from: hf_quant_config.json / config.json quantization_config
+
+serve:
+  framework: sglang
+  image: lmsysorg/sglang:v0.5.14-cu130-runtime
+  script: scripts/serve_deepseek-v4-flash_nvfp4_sglang.sh
+  tp: 8
+  ep: 1
+  port: 30000
+  env:
+    TORCHINDUCTOR_COMPILE_THREADS: 1   # DeepSeek V3/V4 inductor compile-worker workaround (carried from R1)
+  flags_WORKING:   # verified 2026-07-08: Application startup complete + warmup 200 + sweep running
+    - --tp 8
+    - --trust-remote-code
+    - --kv-cache-dtype fp8_e4m3
+    - --context-length 16384
+  auto_selected_by_sglang:
+    attention_backend: dsv4          # 0.5.14 native DeepSeek-V4 backend (do NOT force trtllm_mla)
+    quantization: auto (ModelOptNvFp4FusedMoEMethod)   # do NOT pass --quantization modelopt_fp4
+    moe_runner_backend: auto         # do NOT force flashinfer_trtllm (see crash below)
+  flags_REMOVED_because_they_break:
+    - "--quantization modelopt_fp4  -> ValueError: model config says fp8 (mixed precision), mismatch"
+    - "--moe-runner-backend flashinfer_trtllm -> InternalError: DeepSeek routing needs topkGroup<=4 (trtllm_fused_moe_runner.cu:148)"
+    - "--attention-backend trtllm_mla -> unnecessary; SGLang auto-picks dsv4"
+  parsers: none   # benchmark rule — no --reasoning-parser / --tool-call-parser
+
+status: WORKING   # verified on driver-610 node 2026-07-08
+notes: |
+  FIRST model up on the driver-610 node — validates the whole newest stack
+  (610.43.02 open modules + NVSwitch fabricmanager+nvlsm + SGLang 0.5.14 derived
+  image + NVFP4 on B300). SGLang 0.5.14 has NATIVE deepseek_v4 support (no
+  nightly / PR #25820 needed). KEY LESSON: pass MINIMAL flags and let SGLang
+  auto-select quant/attention/moe backends for deepseek_v4 — every forced R1-era
+  backend flag broke it. max_total_num_tokens=14.7M, warmup gen coherent.

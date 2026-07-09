@@ -1,0 +1,59 @@
+[transformers] Unrecognized keys in `rope_parameters` for 'rope_type'='default': {'attention_factor'}
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[transformers] Unrecognized keys in `rope_parameters` for 'rope_type'='default': {'attention_factor'}
+benchmark_args=Namespace(backend='sglang-oai-chat', base_url='http://127.0.0.1:30000', host='0.0.0.0', port=None, ready_check_timeout_sec=0, dataset_name='random', dataset_path='', speed_bench_category=None, speed_bench_output_len=512, model='nvidia/DeepSeek-V4-Flash-NVFP4', served_model_name=None, tokenizer=None, num_prompts=80, sharegpt_output_len=None, sharegpt_context_len=None, random_input_len=1024, random_output_len=4096, random_range_ratio=1.0, image_count=1, image_resolution='1080p', random_image_count=False, image_format='jpeg', image_content='random', request_rate=inf, use_trace_timestamps=False, max_concurrency=8, output_file='/results/sglang/deepseek-v4-flash/json/DeepSeek-V4-Flash-NVFP4_nvfp4_sglang_tp8_conc8_1k4k.json', output_details=False, print_requests=False, disable_tqdm=False, disable_stream=False, return_logprob=False, top_logprobs_num=0, token_ids_logprob=None, logprob_start_len=-1, return_routed_experts=False, cache_report=False, seed=42, disable_ignore_eos=False, temperature=0.0, top_p=1.0, extra_request_body=None, apply_chat_template=False, profile=False, plot_throughput=False, profile_activities=['CPU', 'GPU'], profile_start_step=None, profile_steps=None, profile_num_steps=None, profile_by_stage=False, profile_stages=None, profile_output_dir=None, profile_prefix=None, lora_name=None, lora_request_distribution='uniform', lora_zipf_alpha=1.5, prompt_suffix='', pd_separated=False, profile_prefill_url=None, profile_decode_url=None, flush_cache=False, warmup_requests=1, tokenize_prompt=False, gsp_num_groups=64, gsp_prompts_per_group=16, gsp_system_prompt_len=2048, gsp_question_len=128, gsp_output_len=256, gsp_range_ratio=1.0, gsp_fast_prepare=False, gsp_send_routing_key=False, gsp_num_turns=1, gsp_ordered=False, gsp_group_distribution='uniform', gsp_zipf_alpha=None, mooncake_slowdown_factor=1.0, mooncake_num_rounds=1, mooncake_workload='conversation', fake_prefill=False, tag=None, header=None)
+
+WARNING It is recommended to use the `Chat` or `Instruct` model for benchmarking.
+Because when the tokenizer counts the output tokens, if there is gibberish, it might count incorrectly.
+
+Namespace(backend='sglang-oai-chat', base_url='http://127.0.0.1:30000', host='0.0.0.0', port=30000, ready_check_timeout_sec=0, dataset_name='random', dataset_path='', speed_bench_category=None, speed_bench_output_len=512, model='nvidia/DeepSeek-V4-Flash-NVFP4', served_model_name=None, tokenizer=None, num_prompts=80, sharegpt_output_len=None, sharegpt_context_len=None, random_input_len=1024, random_output_len=4096, random_range_ratio=1.0, image_count=1, image_resolution='1080p', random_image_count=False, image_format='jpeg', image_content='random', request_rate=inf, use_trace_timestamps=False, max_concurrency=8, output_file='/results/sglang/deepseek-v4-flash/json/DeepSeek-V4-Flash-NVFP4_nvfp4_sglang_tp8_conc8_1k4k.json', output_details=False, print_requests=False, disable_tqdm=False, disable_stream=False, return_logprob=False, top_logprobs_num=0, token_ids_logprob=None, logprob_start_len=-1, return_routed_experts=False, cache_report=False, seed=42, disable_ignore_eos=False, temperature=0.0, top_p=1.0, extra_request_body=None, apply_chat_template=False, profile=False, plot_throughput=False, profile_activities=['CPU', 'GPU'], profile_start_step=None, profile_steps=None, profile_num_steps=None, profile_by_stage=False, profile_stages=None, profile_output_dir=None, profile_prefix=None, lora_name=None, lora_request_distribution='uniform', lora_zipf_alpha=1.5, prompt_suffix='', pd_separated=False, profile_prefill_url=None, profile_decode_url=None, flush_cache=False, warmup_requests=1, tokenize_prompt=False, gsp_num_groups=64, gsp_prompts_per_group=16, gsp_system_prompt_len=2048, gsp_question_len=128, gsp_output_len=256, gsp_range_ratio=1.0, gsp_fast_prepare=False, gsp_send_routing_key=False, gsp_num_turns=1, gsp_ordered=False, gsp_group_distribution='uniform', gsp_zipf_alpha=None, mooncake_slowdown_factor=1.0, mooncake_num_rounds=1, mooncake_workload='conversation', fake_prefill=False, tag=None, header=None)
+
+#Input tokens: 81920
+#Output tokens: 327680
+Starting warmup with 1 sequences...
+Warmup completed with 1 sequences. Starting main benchmark run...
+  0%|          | 0/80 [00:00<?, ?it/s]  1%|▏         | 1/80 [00:26<35:18, 26.82s/it] 11%|█▏        | 9/80 [00:53<06:11,  5.23s/it] 21%|██▏       | 17/80 [01:20<04:22,  4.16s/it] 31%|███▏      | 25/80 [01:47<03:28,  3.79s/it] 41%|████▏     | 33/80 [02:13<02:50,  3.62s/it] 51%|█████▏    | 41/80 [02:40<02:17,  3.52s/it] 61%|██████▏   | 49/80 [03:07<01:47,  3.47s/it] 71%|███████▏  | 57/80 [03:34<01:19,  3.44s/it] 81%|████████▏ | 65/80 [04:01<00:51,  3.42s/it] 91%|█████████▏| 73/80 [04:28<00:23,  3.40s/it]100%|██████████| 80/80 [04:28<00:00,  3.35s/it]
+
+============ Serving Benchmark Result ============
+Backend:                                 sglang-oai-chat
+Traffic request rate:                    inf       
+Max request concurrency:                 8         
+Successful requests:                     80        
+Benchmark duration (s):                  268.40    
+Total input tokens:                      81920     
+Total input text tokens:                 81920     
+Total generated tokens:                  327680    
+Total generated tokens (retokenized):    309690    
+Request throughput (req/s):              0.30      
+Input token throughput (tok/s):          305.21    
+Output token throughput (tok/s):         1220.85   
+Peak output token throughput (tok/s):    1256.00   
+Peak concurrent requests:                16        
+Total token throughput (tok/s):          1526.06   
+Concurrency:                             8.00      
+----------------End-to-End Latency----------------
+Mean E2E Latency (ms):                   26837.16  
+Median E2E Latency (ms):                 26788.24  
+P90 E2E Latency (ms):                    26995.32  
+P95 E2E Latency (ms):                    27018.41  
+P99 E2E Latency (ms):                    27018.80  
+---------------Time to First Token----------------
+Mean TTFT (ms):                          271.69    
+Median TTFT (ms):                        272.70    
+P90 TTFT (ms):                           288.17    
+P95 TTFT (ms):                           290.33    
+P99 TTFT (ms):                           298.08    
+-----Time per Output Token (excl. 1st token)------
+Mean TPOT (ms):                          6.49      
+Median TPOT (ms):                        6.48      
+P90 TPOT (ms):                           6.53      
+P95 TPOT (ms):                           6.53      
+P99 TPOT (ms):                           6.53      
+---------------Inter-Token Latency----------------
+Mean ITL (ms):                           6.76      
+Median ITL (ms):                         6.49      
+P90 ITL (ms):                            6.73      
+P95 ITL (ms):                            6.89      
+P99 ITL (ms):                            13.06     
+Max ITL (ms):                            39.37     
+==================================================

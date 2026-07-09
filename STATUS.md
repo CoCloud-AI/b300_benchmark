@@ -1,6 +1,40 @@
 # B300 Benchmark — Live Status
 
-Last updated: 2026-04-16 00:00 UTC
+Last updated: 2026-07-08 (driver-610 node bring-up)
+
+---
+
+## ⭐ NEW NODE (driver 610.43.02 / SGLang 0.5.14) — ACTIVE 2026-07-08
+
+> **Provenance for ALL results under `results_610/`**: `host 28-197-33-3.maas, 8x B300 SXM6 AC, driver 610.43.02 (open kernel modules), NVSwitch fabricmanager+nvlsm, SGLang 0.5.14 (derived image sglang-b300:v0.5.14), TencentOS Server 4 / kernel 6.6.119, TP=8 EP=1 NVFP4`. Do NOT merge into results_590/ or results_595/. Full node record: `results_610/metadata/node_info.yaml`.
+
+**This is a fresh bare-metal node** — provisioned from scratch this session (nothing preinstalled). Provisioning recorded in `scripts/provision_node_610.sh`. The old `results/` folder was relabeled `results_590/` (its node_info says driver 590.48.01).
+
+### Provisioning done (all verified)
+- NVIDIA **610.43.02** open modules via `.run` (CUDA rhel9 repomd was broken server-side). Pinned `kernel-devel-6.6.119-49.22` to match running kernel. nouveau blacklisted + reboot.
+- **28 TB NVMe** RAID0 (`/mnt/nvme`) holds HF cache + docker data-root (70 GB / root too small).
+- Docker 29.6.1 + nvidia-container-toolkit 1.19.1; docker data-root on NVMe.
+- **NVSwitch fabricmanager 610.43.02 + nvlsm** — MANDATORY (NVL5+): without it CUDA-in-container = "error 802 system not yet initialized". See `results_610/metadata/node_info.yaml` and memory.
+- SGLang image fix: stock v0.5.14 missing `distro` pkg → derived `sglang-b300:v0.5.14` (`scripts/Dockerfile.sglang-b300`).
+
+### Model queue (user-selected, NVFP4 only, on NVMe). All initial 5 downloaded ✅
+1. **DeepSeek-V4-Flash** `nvidia/DeepSeek-V4-Flash-NVFP4` (168 GB, deepseek_v4) — ✅ **1k1k COMPLETE**: peak 14,074 tok/s @ conc=256 (knee), plateau guard fired at 512 (+1.6%), 0 failures. 1k4k/4k1k pending. Serve: `scripts/serve_deepseek-v4-flash_nvfp4_sglang.sh` (WORKING).
+2. **MiniMax-M3** `nvidia/MiniMax-M3-NVFP4` (233 GB, minimax_m3_vl, multimodal) — ✅ downloaded, not yet served.
+3. **GLM-5.2** `nvidia/GLM-5.2-NVFP4` (433 GB, glm_moe_dsa) — ✅ downloaded, not yet served.
+4. **Kimi-K2.7-Code** `nvidia/Kimi-K2.7-Code-NVFP4` (555 GB, kimi_k25) — ✅ downloaded (plain K2.7 NVFP4 not published).
+5. **DeepSeek-V4-Pro** `nvidia/DeepSeek-V4-Pro-NVFP4` (851 GB, deepseek_v4) — ✅ downloaded, not yet served.
+
+### Extras — second wave (user-added 2026-07-08, `scripts/download_extras_610.sh`)
+6. **Qwen3.5-397B V2** `nvidia/Qwen3.5-397B-A17B-NVFP4-V2` (244 GB, qwen3_5_moe) — ⏳ downloading. Newer V2 requant of the 595-era Qwen (same arch), for an updated driver-610 number. No *new* large Qwen model exists (Qwen3.6 only small variants; no Qwen4 NVFP4).
+7. **Step-3.7-Flash** `stepfun-ai/Step-3.7-Flash-NVFP4` (129 GB, step3p7) — ⏸ queued. StepFun's only official NVFP4.
+8. **MiMo-V2.5** `lukealonso/MiMo-V2.5-NVFP4` (184 GB, mimo_v2, 48L/256e/8act) — ⏸ queued. Xiaomi MiMo; reputable community quant (no official XiaomiMiMo NVFP4 org repo). Skipped MiMo-V2.5-Pro (597 GB) — obscure author, gated config, non-standard MXFP8-attn mix, not clean NVFP4.
+
+### Key lesson (driver-610 / SGLang 0.5.14)
+**Pass MINIMAL serve flags.** SGLang 0.5.14 natively supports the new archs (deepseek_v4, etc.) and auto-selects the right quant/attention/MoE backends. Every forced R1-era flag broke DeepSeek-V4-Flash: `--quantization modelopt_fp4` (mixed-precision mismatch), `--moe-runner-backend flashinfer_trtllm` (topkGroup<=4 crash), `--attention-backend trtllm_mla` (unneeded; auto → `dsv4`). Working set: `--tp 8 --trust-remote-code --kv-cache-dtype fp8_e4m3 --context-length 16384`.
+
+---
+
+## (RETIRED) driver 590.48.01 node — historical, below
 
 ## Node tag for ALL results in this file
 
