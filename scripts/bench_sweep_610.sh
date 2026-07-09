@@ -139,6 +139,13 @@ for CONC in 1 2 4 8 16 32 64 128 256 512; do
       2>&1 | tee "$LOG"
   else
     # vLLM bench tool — lives in the vLLM container.
+    # v0.24 verified 2026-07-09 (--help=all):
+    # - --random-range-ratio default 0.0 = EXACT fixed lengths on vLLM (samples
+    #   [len*(1-r), len*(1+r)] — OPPOSITE convention from sglang's 0.0-trap), so
+    #   we deliberately pass nothing.
+    # - --ignore-eos added: sglang's chat backend sets ignore_eos implicitly,
+    #   vLLM's default is False; without it early EOS would silently shorten
+    #   outputs and break apples-to-apples token counts.
     docker exec -i "$CID" \
       vllm bench serve \
       --backend openai-chat \
@@ -149,6 +156,7 @@ for CONC in 1 2 4 8 16 32 64 128 256 512; do
       --random-output-len $OSL \
       --num-prompts $PROMPTS \
       --max-concurrency $CONC \
+      --ignore-eos \
       --ready-check-timeout-sec 0 \
       --endpoint /v1/chat/completions \
       --save-result \
