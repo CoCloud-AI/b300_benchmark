@@ -126,3 +126,20 @@ TP=8 (320 at TP=4 — also broken). Every kernel path rejects it:
 Only TP=2 aligns (640) — breaks full-node TP=8 methodology; a 4x TP=2 replica
 deployment is future work, not comparable. Same alignment family as the 590-node
 M2.7-FP8 TP ceiling, now on the NVFP4 path. SKIPPED; 129 GB weights retained.
+
+## MiMo-V2.5: SKIPPED — not cleanly servable at TP=8 on either stack (2026-07-09)
+
+lukealonso/MiMo-V2.5-NVFP4 (community quant of XiaomiMiMo/MiMo-V2.5, mimo_v2):
+- Quant STRIPPED the official custom code + auto_map; no transformers (5.8-5.13)
+  knows mimo_v2 natively. Fixed locally: grafted configuration_mimo_v2.py from
+  the official repo + restored auto_map.AutoConfig (+ HF_HUB_OFFLINE / local-path
+  serve for the dynamic loader). Config then loads on BOTH frameworks.
+- vLLM v0.24: hard assert "TP size must evenly split the number of KV heads"
+  (num_kv_heads=4, TP=8; no replication path in its MiMoV2 impl).
+- SGLang 0.5.14: qkv weights are TP=4-interleaved; --dp-size 2
+  --enable-dp-attention satisfies the attention-TP=4 requirement, but then
+  "No processor registered for architecture: ['MiMoV2ForCausalLM']" — the omni
+  config demands an mm processor that 0.5.14 doesn't register for this arch
+  (--language-only and stashing preprocessor/audio files do not bypass it).
+Verdict: needs newer SGLang with MiMoV2 processor support, or an official
+non-omni NVFP4 checkpoint. 184 GB weights + graft retained for a future retry.
