@@ -18,6 +18,14 @@ The remainder of this file is the canonical step-by-step process and the histori
 
 ---
 
+## Step -1: Cycle-Start Checklist (once per measurement cycle, BEFORE planning sweeps)
+
+Added 2026-07-17 after the EP blind spot (April's "EP broken" verdict silently governed the July 610 cycle while upstream had already shipped working EP paths — and the fix was posted in our own issue thread 9 days before the cycle started).
+
+1. **Re-verify stale Known Issues** (CLAUDE.md entries marked STALE or older than one cycle): run a ~1 h capability smoke matrix — at minimum EP × each framework × one model — before locking the sweep plan. Version jumps (SGLang 0.5.10→0.5.14, vLLM 0.13→0.24 class) invalidate old verdicts.
+2. **Read our upstream threads** (sgl-project/sglang#24502 #31503 #31556, vllm-project/vllm#48921, and threads we've commented on): maintainer replies often contain working flag combinations. Check for new NVFP4 checkpoint revisions (V2 requants) of queue models while at it.
+3. **Tag every new finding** with "as of <framework versions, date>". Untagged or expired findings must not gate configuration choices.
+
 ## Step 0: Pre-launch Check
 
 In the `bench` tmux session:
